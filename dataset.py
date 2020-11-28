@@ -123,7 +123,7 @@ class Light_Curve_dataset(torch.utils.data.Dataset):
 
         new_data[0]=mean_mag
         new_data[1] = std_mag
-        new_data[2] = mean_mag_gradient_abs
+        new_data[2] = std_mag
         new_data = np.reshape(new_data,(3,60,60))
         return new_data
 
@@ -137,7 +137,10 @@ class Light_Curve_dataset(torch.utils.data.Dataset):
         # plt.imshow(processed_data[1])
         # plt.show()
         # plt.title(label)
+        if label == 0 and random.random() < 0.1:
+            processed_data = np.zeros_like(processed_data)
         processed_data = torch.from_numpy(processed_data)
+
         # data.unsqueeze(dim=0)
         # data = data.expand((3,60,60))
         label = torch.tensor(label)
