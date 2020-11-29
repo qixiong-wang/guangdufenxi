@@ -137,7 +137,10 @@ class Light_Curve_dataset(torch.utils.data.Dataset):
         # plt.imshow(processed_data[1])
         # plt.show()
         # plt.title(label)
+        if label == 0 and random.random() < 0.1:
+            processed_data = np.zeros_like(processed_data)
         processed_data = torch.from_numpy(processed_data)
+
         # data.unsqueeze(dim=0)
         # data = data.expand((3,60,60))
         label = torch.tensor(label)

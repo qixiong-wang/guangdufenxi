@@ -117,6 +117,7 @@ def train(net, optimizer, epochs,best_acc=0):
             acc = test(model, test_loader)
             if acc > best_acc:
                 best_acc = acc
+                torch.save(model.state_dict(),'./best_model.pth')
                 print('best_acc:',best_acc)
 
 train(model, optimizer, epochs)
