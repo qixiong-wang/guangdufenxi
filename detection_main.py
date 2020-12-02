@@ -134,7 +134,7 @@ with open(test_txt_path) as f:
                     print(i)
                     vline[(i-1)*100]=1
                     vline[(i + 1) * 100] = 1
-                    plt.plot(x,vline)
+                    plt.plot(x,vline, 'r')
 
         # scorecam_map = mynet_scorecam(input_data,label)
         # weight_phase = scorecam_map.reshape(3600).cpu().detach().numpy()
@@ -143,3 +143,4 @@ with open(test_txt_path) as f:
         # plt.plot(x, weight_phase.squeeze(), 'g')
         plt.plot(phase, mag, 'b-*')
         plt.show()
+        plt.title(filename)

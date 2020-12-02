@@ -83,6 +83,18 @@ class Light_Curve_dataset(torch.utils.data.Dataset):
                 pass
         return curve
 
+    def random_drop(self, curve):
+        nonzero_idx = np.array(np.where(curve[0] != 0))[0]
+        max_idx = np.max(nonzero_idx)
+        min_idx = np.min(nonzero_idx)
+        drop_length = int((max_idx - min_idx) * 0.2)
+        # drop_length = 200
+        start_point = random.randint(min_idx, max_idx)
+
+        curve[:, start_point:start_point + drop_length] = 0
+        # plt.plot(curve[0])
+        # plt.show()
+        return curve
 
     def preprocess(self,phase, mag, window_size=0.1, fs=20):
 
@@ -98,9 +110,11 @@ class Light_Curve_dataset(torch.utils.data.Dataset):
             if num_points == 0:
                 mean_mag[i] = 0
                 std_mag[i] = 0
+
             else:
                 mean_mag[i] = np.mean(mag_in_window)
                 std_mag[i] = np.std(mag_in_window)
+
 
         ## culculate gradiant for curve
         epsilon = 0.001
@@ -119,11 +133,14 @@ class Light_Curve_dataset(torch.utils.data.Dataset):
 
         mean_mag=self.biliner_interpolation(mean_mag)
         std_mag = self.biliner_interpolation(std_mag)
+        # plt.plot(mean_mag)
+        # plt.show()
         mean_mag_gradient_abs = self.biliner_interpolation(mean_mag_gradient_abs)
 
         new_data[0]=mean_mag
         new_data[1] = std_mag
         new_data[2] = std_mag
+
         new_data = np.reshape(new_data,(3,60,60))
         return new_data
 
@@ -133,13 +150,15 @@ class Light_Curve_dataset(torch.utils.data.Dataset):
         processed_data= self.curve_list[i]
         label = self.label_list[i]
 
-
+        #
         # plt.imshow(processed_data[1])
         # plt.show()
         # plt.title(label)
-        if label == 0 and random.random() < 0.1:
-            processed_data = np.zeros_like(processed_data)
-        processed_data = torch.from_numpy(processed_data)
+        if label == 0 and random.random() < 0.5:
+            processed_data = self.random_drop(processed_data)
+        # if label == 0 and random.random() < 0.1:
+        #     processed_data = np.zeros_like(processed_data)
+        # processed_data = torch.from_numpy(processed_data)
 
         # data.unsqueeze(dim=0)
         # data = data.expand((3,60,60))

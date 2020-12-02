@@ -40,7 +40,7 @@ test_path = 'choosed_data/classification/test.txt'
 fs=20
 window_size=0.5
 BATCH_SIZE=10
-epochs =200
+epochs =500
 
 train_set = Light_Curve_dataset(train_path,window_size,fs)
 train_loader = torch.utils.data.DataLoader(train_set,batch_size=BATCH_SIZE,num_workers=4,shuffle=True)
